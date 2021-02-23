@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import itertools
 from transforms import cheby
 from sklearn.metrics import mean_squared_error
 
-N = np.array([16, 640])
-#N = np.array([10, 20, 40, 80, 160, 320, 640])
+N = np.array([10, 20, 40, 80, 160, 320, 640])
+M = np.array([10, 20, 40, 80])
 
-def plot_derivative(N, func, method):
-    M = 10
+def plot_derivative(N, M):
     t = np.arange(0, N+1)*np.pi/N
     x = np.cos(t)
     f = lambda x: np.sin(M*np.pi*x)
@@ -33,23 +33,22 @@ def plot_derivative(N, func, method):
     phi = np.append(phi, 0.0)
     # inverse transform
     fp = cheby.icheby(t, phi)
-    # exact solution
-    xe = np.linspace(-1, 1, 640)
-    ex = dfdx(xe)
-    # interpolate onto 640 nodes
-    fpi = np.interp(xe, x, fp)
     # error
-    e = mean_squared_error(fpi, ex)
-    plt.plot(x, fp, '-o', label='N = {}'.format(N))
+    e = mean_squared_error(fp, dfdx(x))
     return e
-e = np.zeros_like(N, dtype='float')
-for i in range(len(N)):
-    e[i] = plot_derivative(N[i], 2, 'chebyshev')
 
-#x = np.linspace(-1, 1, 128)
-#plt.plot(x, dfdx(x), '-', label='exact')
-plt.xlabel('$x$')
-plt.ylabel('$df$/$dx$')
+e = np.zeros((len(N), len(M)))
+for j in range(len(M)):
+    for i in range(len(N)):
+        e[i,j] = plot_derivative(N[i], M[j])
+
+marker = itertools.cycle(('D', '*', '^', 'o')) 
+for j in range(len(M)):
+    plt.loglog(N/M[j], e[:,j], marker=next(marker),label='M = {}'.format(M[j]))
+plt.xlabel('$N/M$')
+plt.ylim([1e-18,1e6])
+plt.vlines(np.pi, 1e-18, 1e6,linewidth=2,color='k')
+plt.grid(which='both')
+plt.ylabel('Error')
 plt.legend()
 plt.show()
-print(e)
