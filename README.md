@@ -1,6 +1,6 @@
 ## ME408 - HW6
 
-Problem 1: incomplete
+Problem 1: complete
 
 Problem 2: complete
 
