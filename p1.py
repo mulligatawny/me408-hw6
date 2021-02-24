@@ -15,11 +15,11 @@ def compute_int(N):
     f = lambda x: np.piecewise(x, [x < 0, x >= 0], \
     [lambda x: -2*x-1,lambda x: 2*x-1]) # part (b)
     # true integral
-    Ie = integrate.quadrature(f, -1, 1, maxiter=1000)[0]
+    Ie = integrate.quadrature(f, -1, 1, maxiter=100)[0]
     # chebyshev transform
     Fk = cheby.cheby(x, f)
     k = np.arange(0, N+1)
-    # compute coefficients
+    # compute coefficients (dn)
     d = np.zeros(N+1)
     for i in range(1, N+1):
         if i==1:
@@ -31,10 +31,13 @@ def compute_int(N):
     d[0] = sum(d[1::2]) - sum(d[::2])
     # inverse transform
     dc = cheby.icheby(t, d)
+    print(dc)
     return Ie, dc
 
 for i in range(len(N)):
     Ie, dc = compute_int(N[i])
     print('For N = {}'.format(N[i]), 'the computed value is',dc[0])
     print('The error is', (dc[0]-Ie)**2)
+    plt.plot(np.arange(N[i]+1)/N[i],dc)
 print('The true value is:', Ie)
+plt.show()
