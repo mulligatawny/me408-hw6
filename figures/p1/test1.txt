@@ -1,7 +1,0 @@
-For N = 4 the computed value is 2.0
-The error is 0.0
-For N = 8 the computed value is 2.0
-The error is 0.0
-For N = 16 the computed value is 2.0
-The error is 0.0
-The true value is: 2.0

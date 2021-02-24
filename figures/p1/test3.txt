@@ -1,7 +1,0 @@
-For N = 4 the computed value is 0.22916666666666669
-The error is 0.0031976332199546197
-For N = 8 the computed value is 0.2857142857142857
-The error is 4.930380657631324e-32
-For N = 16 the computed value is 0.2857142857142858
-The error is 1.1093356479670479e-31
-The true value is: 0.2857142857142855
